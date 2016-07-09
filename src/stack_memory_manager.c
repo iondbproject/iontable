@@ -1,31 +1,29 @@
-
 /******************************************************************************/
 /**
-@file		db_query_mm.c
+@file
 @author		Graeme Douglas
-@brief		A stack-based memory manager to be used on a per-query basis.
-@see		For more information, refer to @ref db_query_mm.h.
-@details
-@copyright	Copyright 2013 Graeme Douglas
-@license	Licensed under the Apache License, Version 2.0 (the "License");
-		you may not use this file except in compliance with the License.
-		You may obtain a copy of the License at
-			http://www.apache.org/licenses/LICENSE-2.0
-
+@brief		A stack-based memory manager.
+@copyright	Copyright 2016
+				The University of British Columbia,
+				IonDB Project Contributors (see AUTHORS.md)
 @par
-		Unless required by applicable law or agreed to in writing,
-		software distributed under the License is distributed on an
-		"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-		either express or implied. See the License for the specific
-		language governing permissions and limitations under the
-		License.
+			Licensed under the Apache License, Version 2.0 (the "License");
+			you may not use this file except in compliance with the License.
+			You may obtain a copy of the License at
+					http://www.apache.org/licenses/LICENSE-2.0
+@par
+			Unless required by applicable law or agreed to in writing,
+			software distributed under the License is distributed on an
+			"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+			either express or implied. See the License for the specific
+			language governing permissions and limitations under the
+			License.
 */
 /******************************************************************************/
 
 #include "stack_memory_manager.h"
 #include "macros.h"
 
-/* Initialize the query memory manager instance. */
 int init_query_mm(db_query_mm_t *mmp, void *segment, int size)
 {
 	mmp->segment = segment;
@@ -39,8 +37,6 @@ int init_query_mm(db_query_mm_t *mmp, void *segment, int size)
 	return 1;
 }
 
-/*** Memory allocation methods. ***/
-/* Allocating on the front stack. */
 void* db_qmm_falloc(db_query_mm_t *mmp, db_int size)
 {
 	/* Check that size requested is valid. */
@@ -85,7 +81,6 @@ void* db_qmm_falloc(db_query_mm_t *mmp, db_int size)
 	return ptr;
 }
 
-/* Allocating on the back stack. */
 void* db_qmm_balloc(db_query_mm_t *mmp, db_int size)
 {
 	/* Check that size requested is valid. */
@@ -122,8 +117,6 @@ void* db_qmm_balloc(db_query_mm_t *mmp, db_int size)
 	return POINTERATNBYTES(mmp->last_back, sizeof(db_int), void*);
 }
 
-/*** Deallocation methods. ***/
-/* Free memory off the front stack. */
 db_int db_qmm_ffree(db_query_mm_t *mmp, void *ptr)
 {
 	/* Retrieve the size of the memory chunk we are to free. If it is
@@ -192,7 +185,6 @@ db_int db_qmm_ffree(db_query_mm_t *mmp, void *ptr)
 	}
 }
 
-/* Free memory off the front stack. */
 db_int db_qmm_bfree(db_query_mm_t *mmp, void *ptr)
 {
 	/* Retrieve the size of the memory chunk we are to free. If it is
@@ -262,7 +254,6 @@ db_int db_qmm_bfree(db_query_mm_t *mmp, void *ptr)
 	}
 }
 
-/* Extend last allocation to an additional size, if possible. */
 db_int db_qmm_fextend(db_query_mm_t *mmp, db_int size)
 {
 	/* Check that size requested is valid. */
@@ -335,7 +326,6 @@ db_int db_qmm_fextend(db_query_mm_t *mmp, db_int size)
 	return 1;
 }
 
-/* Extend the most recently allocated memory segment on back stack. */
 void* db_qmm_bextend(db_query_mm_t *mmp, db_int size)
 {
 	/* Check that we haven't requested more memory than total size. */
@@ -376,13 +366,11 @@ void* db_qmm_bextend(db_query_mm_t *mmp, db_int size)
 	return POINTERATNBYTES(mmp->last_back, sizeof(db_int), void*);
 }
 
-/* Deallocate all memory on front stack. */
 void db_qmm_fclear(db_query_mm_t *mmp)
 {
 	mmp->next_front = mmp->segment;
 }
 
-/* Deallocate all memory on back stack. */
 void db_qmm_bclear(db_query_mm_t *mmp)
 {
 	mmp->last_back = POINTERATNBYTES(mmp->segment, mmp->size, void*);
