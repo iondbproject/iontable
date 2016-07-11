@@ -134,47 +134,63 @@ typedef uint8_t ion_table_schema_count_t;
 typedef uint8_t ion_table_error_t;
 
 /**
-@brief	Parameter in an instruction for a query plan. Can be an integer, unsigned integer, or pointer.
+@brief	Parameter for an instruction in a query plan. Can be an integer, unsigned integer, or pointer.
 */
 typedef union {
+	/**> Pointer to a string or data type. The size of the pointer depends on the system architecture. */
 	void			*pointer;
-	int 			integer;
+	/**> Integer. This is 2 bytes on 8-bit devices and 4 bytes on 32-bit devices. */
+	int		 		integer;
+	/**> Unsigned Integer. This is 2 bytes on 8-bit devices and 4 bytes on 32-bit devices. */
 	unsigned int	u_integer;
 } ion_table_parameter_t;
 
 /**
-@brief
+@brief	Structure of an instruction in query a query plan. There is an opcode and three parameters for each
+ 		instruction. Some instructions may not use all of the parameters.
 */
 typedef struct {
+	/**> An opcode */
 	ion_table_opcode_t		opcode;
+	/**> Parameter 1 */
 	ion_table_parameter_t	p1;
+	/**> Parameter 2 */
 	ion_table_parameter_t	p2;
+	/**> Parameter 3 */
 	ion_table_parameter_t	p3;
 } ion_table_instruction_t;
 
 /**
-@brief
+@brief	Structure of a query plan. The query plan or executable includes an array of instructions, an program
+ 		counter, and other various data needed by the Virtual Machine Executor.
 */
 typedef struct {
+	/**> An array of instructions. */
 	ion_table_instruction_t			*instructions;
-	db_query_mm_t					*mem_man;
-	ion_table_stop_flag_t			stop;
+	/**> The index of the current instruction (aka. the program counter). */
 	ion_table_instruction_index_t	current_instr_idx;
+	/**> The previous opcode that was executed. */
 	ion_table_opcode_t				prev_opcode;
+	/**> Pre-allocated memory manager that stores data used by the instructions. */
+	db_query_mm_t					*mem_man;
+	/**> A stop flag telling the executor to pause and to allow the user to know if the executor is at a stop point. */
+	ion_table_stop_flag_t			stop;
 } ion_table_executable_t;
 
 /**
-@brief
+@brief	A structure that represents a tuple.
 */
 typedef struct {
-	int a;
+	int a; // TODO
 } ion_table_tuple_t;
 
 /**
-@brief
+@brief	Structure of a schema item that represents an the type and size of an attribute.
 */
 typedef struct {
+	/**> The size of the attribute. */
 	ion_table_attribute_size_t		size;
+	/**> The type of the attribute. */
 	ion_table_attribute_type_t		type;
 } ion_table_schema_item_t;
 
@@ -182,9 +198,13 @@ typedef struct {
 @brief
 */
 typedef struct {
-	int 							id;	// TODO: Make this the actual master table id type.
+	/**> ID of underlying dictionary assigned by the IonDB master table. */
+	uint16_t 						id;	// TODO: Make this the actual master table id type.
+	/**> The number of attributes in the schema. */
 	ion_table_schema_count_t		num_attributes;
+	/**> An array of schema items. */
 	ion_table_schema_item_t			*items;
+	/**> An array of names describing the schema items / attributes. */
 	char 							**names;
 } ion_table_schema_t;
 

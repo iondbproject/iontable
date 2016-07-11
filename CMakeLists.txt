@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
 project(ion_table)
 
+set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -g -Wall -Wextra -pedantic -std=c99 -Wno-missing-field-initializers")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wextra -std=c++11 -Wno-vla -Wno-vla-extension -Wno-c99-extensions -Wno-writable-strings -Wno-write-strings")
+
 set(SOURCE_FILES
     src/vme.c
     src/vme.h
@@ -11,9 +14,6 @@ set(SOURCE_FILES
     src/tests/unit/run_ion_table.c
     src/schema_manager.c
     src/schema_manager.h
-    src/types.h)
+    src/types.h src/query_serializer.h src/query_serializer.c)
 
 add_executable(${PROJECT_NAME}	${SOURCE_FILES})
-
-set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -g -Wall -Wextra -pedantic -std=c99 -Wno-missing-field-initializers")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wextra -std=c++11 -Wno-vla -Wno-vla-extension -Wno-c99-extensions -Wno-writable-strings -Wno-write-strings")
