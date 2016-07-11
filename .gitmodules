@@ -4,4 +4,4 @@
 [submodule "src/iondb"]
 	path = src/iondb
 	branch = development
-	url = https://github.com/iondbproject/iondb.git
+	url = https://github.com/iondbproject/iondb
