@@ -1,0 +1,7 @@
+[submodule "tests/planck_unit"]
+	path = tests/planck_unit
+	url = https://github.com/iondbproject/planck-unit
+[submodule "src/iondb"]
+	path = src/iondb
+	branch = development
+	url = git@github.com:iondbproject/iondb.git

@@ -10,8 +10,8 @@ set(SOURCE_FILES
     src/stack_memory_manager.c
     src/stack_memory_manager.h
     src/macros.h
-    src/tests/unit/test_ion_table.c
-    src/tests/unit/run_ion_table.c
+        tests/unit/test_ion_table.c
+        tests/unit/run_ion_table.c
     src/schema_manager.c
     src/schema_manager.h
     src/types.h src/query_serializer.h src/query_serializer.c)

@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../../vme.h"
+#include "../../src/vme.h"
 
 void
 test_create_table_001(
