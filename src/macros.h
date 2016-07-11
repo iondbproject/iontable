@@ -96,8 +96,10 @@
 
 /**
 @brief		Creates a status struct with a given error and count.
-@param		Error of type @ref ion_table_error_e.
-@param		Number of elements affected before creation of error.
+@param		error
+ 				Error of type @ref ion_table_error_e.
+@param		count
+ 				Number of elements affected before creation of error.
 @return		A compound literal that is an @ref ion_table_status_t.
 */
 #define ION_TABLE_STATUS_CREATE(error, count) ((ion_table_status_t) { (error), (count) })
@@ -110,14 +112,16 @@
 
 /**
 @brief		Creates a status struct with a given error and count of 0.
-@param		Error of type @ref ion_table_error_e.
+@param		error
+ 				Error of type @ref ion_table_error_e.
 @return		A compound literal that is an @ref ion_table_status_t.
 */
 #define ION_TABLE_STATUS_ERROR(error) ((ion_table_status_t) { (error), 0 })
 
 /**
 @brief		Creates a status struct that indicates a success and that a specified number of elements were affected.
-@param		Number of elements affected.
+@param		count
+ 				Number of elements affected.
 @return		A compound literal that is an @ref ion_table_status_t.
 */
 #define ION_TABLE_STATUS_OK(count) ((ion_table_status_t) { ION_TABLE_ERROR_OK, (count) })
