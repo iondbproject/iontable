@@ -74,7 +74,7 @@
 
 /**
 @brief		Move a pointer exactly a number of units cleanly.
-@detail		Macro for moving any pointer @p s by @p n units cleanly by casting it to type source pointer type @p ts
+@details	Macro for moving any pointer @p s by @p n units cleanly by casting it to type source pointer type @p ts
  			then casting it back to destination pointer type @p td.
 @param		d
  				The destination pointer. This is the pointer that is to be set.

@@ -21,13 +21,11 @@
 */
 /******************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "../../src/vme.h"
+#include "test_vme.h"
 
 void
 test_create_table_001(
+	planck_unit_test_t *tc
 ) {
 	db_query_mm_t			mem_man;
 	ion_table_executable_t	plan;
@@ -42,11 +40,25 @@ test_create_table_001(
 	init_query_mm(&mem_man, memory, size);
 
 	ion_table_init_executable(&plan, instructions, &mem_man);
+
+	PLANCK_UNIT_ASSERT_TRUE(tc, 1);
+}
+
+planck_unit_suite_t *
+vme_getsuite(
+) {
+	planck_unit_suite_t *suite = planck_unit_new_suite();
+
+	PLANCK_UNIT_ADD_TO_SUITE(suite, test_create_table_001);
+
+	return suite;
 }
 
 void
-run_all_ion_table_tests(
+run_all_tests_vme(
 	void
 ) {
-	test_create_table_001();
+	planck_unit_suite_t *suite = vme_getsuite();
+	planck_unit_run_suite(suite);
+	planck_unit_destroy_suite(suite);
 }
