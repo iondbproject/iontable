@@ -50,7 +50,7 @@ ion_table_create_schema(
 	file = fopen(filename, "rb");
 	if (NULL != file) {
 		fclose(file);
-		return ION_TABLE_ERROR_TABLE_EXISTS;
+		return ION_TABLE_ERROR_TABLE_ALREADY_EXISTS;
 	}
 
 	/* Create a new schema file. */
@@ -178,17 +178,27 @@ ion_table_delete_schema(
 }
 
 ion_table_error_t
-ion_table_free_schema_from_memory(
+ion_table_free_schema_names(
 	ion_table_schema_t *schema,
 	db_query_mm_t *mem_man
 ) {
 	int i;
-	for (i = (int)(schema->num_attributes) -1; i >= 0 ; i--) {
+	for (i = (int)(schema->num_attributes) - 1; i >= 0 ; i--) {
 		if (db_qmm_bfree(mem_man, schema->items[i].name) != 1) {
 			return ION_TABLE_ERROR_FAILED_TO_FREE_MEMORY;
 		}
+
+		schema->items[i].name = NULL;
 	}
 
+	return ION_TABLE_ERROR_OK;
+}
+
+ion_table_error_t
+ion_table_free_schema_items(
+	ion_table_schema_t *schema,
+	db_query_mm_t *mem_man
+) {
 	if (db_qmm_bfree(mem_man, schema->items) != 1) {
 		return ION_TABLE_ERROR_FAILED_TO_FREE_MEMORY;
 	}

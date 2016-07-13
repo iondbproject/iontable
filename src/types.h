@@ -56,7 +56,7 @@ typedef enum {
 	/**> An error code used for ion_table_status_t to indicate that a status has not been initialized yet. */
 	ION_TABLE_ERROR_STATUS_UNINITIALIZED,
 	/**> An error code used to indicate that a table (or schema) already exists. */
-	ION_TABLE_ERROR_TABLE_EXISTS,
+	ION_TABLE_ERROR_TABLE_ALREADY_EXISTS,
 	/**> An error code that indicates that an opcode in an execution plan is invalid. */
 	ION_TABLE_ERROR_UNDEFINED_OPCODE
 } ion_table_error_e;
@@ -88,7 +88,9 @@ typedef enum {
 	/**> Sets up an attribute when creating the schema. */
 	ION_TABLE_OPCODE_DEFINE_ATTRIBUTE,
 	/**> Creates a table given that the schema is defined and table name is given. */
-	ION_TABLE_CREATE_TABLE,
+	ION_TABLE_OPCODE_CREATE_TABLE,
+	/**> Sets the stop flag in the executable. */
+	ION_TABLE_OPCODE_HALT,
 	/**> No operation. */
 	ION_TABLE_OPCODE_NOP
 } ion_table_opcode_e;
@@ -107,11 +109,6 @@ typedef enum {
 @brief	Opcode ID
 */
 typedef uint8_t ion_table_opcode_t;
-
-/**
-@brief	Flag used to indicate to the query executor and user that the query has stopped and required intervention.
-*/
-typedef uint8_t ion_table_stop_flag_t;
 
 /**
 @brief	The index for the instruction in the instruction array (or instruction counter).
@@ -177,10 +174,14 @@ typedef struct {
 	ion_table_instruction_index_t	current_instr_idx;
 	/**> The previous opcode that was executed. */
 	ion_table_opcode_t				prev_opcode;
+	/**> A stop flag telling the executor to pause and to allow the user to know if the executor is at a stop point. */
+	ion_table_bool_e				stop;
+	/**> Used to count the number of occurrences of something arbitrary. */
+	uint32_t 						count;
 	/**> Pre-allocated memory manager that stores data used by the instructions. */
 	db_query_mm_t					*mem_man;
-	/**> A stop flag telling the executor to pause and to allow the user to know if the executor is at a stop point. */
-	ion_table_stop_flag_t			stop;
+	/**> A pointer used by the memory manager for arbitrary data in memory. */
+	void							*pointer;
 } ion_table_executable_t;
 
 /**

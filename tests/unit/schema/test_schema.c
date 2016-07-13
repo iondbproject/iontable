@@ -268,7 +268,9 @@ test_free_schema(
 	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, ION_TABLE_ERROR_OK, ion_table_load_schema(tables[0], &loaded_schema, &mem_man));
 
 	/* Free the loaded schema from memory. */
-	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, ION_TABLE_ERROR_OK, ion_table_free_schema_from_memory(&loaded_schema, &mem_man));
+	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, ION_TABLE_ERROR_OK, ion_table_free_schema_names(&loaded_schema, &mem_man));
+	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, ION_TABLE_ERROR_OK, ion_table_free_schema_items(&loaded_schema, &mem_man));
+
 	PLANCK_UNIT_ASSERT_TRUE(tc, loaded_schema.items == NULL);
 }
 

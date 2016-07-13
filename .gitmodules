@@ -3,5 +3,5 @@
 	url = https://github.com/iondbproject/planck-unit
 [submodule "src/iondb"]
 	path = src/iondb
-	branch = development
+	branch = release
 	url = https://github.com/iondbproject/iondb

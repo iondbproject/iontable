@@ -29,6 +29,7 @@
 
 #include "types.h"
 #include "macros.h"
+#include "schema.h"
 #include "stack_memory_manager.h"
 
 /**
@@ -60,8 +61,7 @@ ion_table_init_executable(
 */
 ion_table_status_t
 ion_table_execute(
-	ion_table_executable_t *plan,
-	ion_table_tuple_t *tuple
+	ion_table_executable_t *plan
 );
 
 #endif /* ION_TABLE_VME_H_ */
