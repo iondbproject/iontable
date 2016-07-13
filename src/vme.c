@@ -22,6 +22,7 @@
 /******************************************************************************/
 
 #include "vme.h"
+#include "types.h"
 
 void
 ion_table_init_executable(
@@ -61,7 +62,7 @@ ion_table_execute(
 					item = db_qmm_balloc(plan->mem_man, sizeof(ion_table_schema_item_t));
 				}
 				item->type	= (ion_table_attribute_type_t) CUROP.p1.u_integer;
-				item->size	= (ion_table_attribute_size_t) CUROP.p2.u_integer;
+				item->attribute_size	= (ion_table_attribute_size_t) CUROP.p2.u_integer;
 
 				// TODO: Third parameter is attribute name
 
