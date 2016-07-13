@@ -40,8 +40,6 @@ test_create_table_001(
 	init_query_mm(&mem_man, memory, size);
 
 	ion_table_init_executable(&plan, instructions, &mem_man);
-
-	PLANCK_UNIT_ASSERT_TRUE(tc, 1);
 }
 
 planck_unit_suite_t *

@@ -21,8 +21,8 @@
 */
 /******************************************************************************/
 
-#if !defined(MACROS_H_)
-#define MACROS_H_
+#if !defined(ION_TABLE_MACROS_H_)
+#define ION_TABLE_MACROS_H_
 
 /**
 @brief		Macro for moving any pointer some number of bytes cleanly.

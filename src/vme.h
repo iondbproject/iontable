@@ -22,8 +22,8 @@
 */
 /******************************************************************************/
 
-#if !defined(ION_TABLE_H_)
-#define ION_TABLE_H_
+#if !defined(ION_TABLE_VME_H_)
+#define ION_TABLE_VME_H_
 
 #include <stdint.h>
 
@@ -64,4 +64,4 @@ ion_table_execute(
 	ion_table_tuple_t *tuple
 );
 
-#endif /* ION_TABLE_H_ */
+#endif /* ION_TABLE_VME_H_ */

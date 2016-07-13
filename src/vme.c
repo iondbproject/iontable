@@ -63,6 +63,8 @@ ion_table_execute(
 				item->type	= (ion_table_attribute_type_t) CUROP.p1.u_integer;
 				item->size	= (ion_table_attribute_size_t) CUROP.p2.u_integer;
 
+				// TODO: Third parameter is attribute name
+
 				break;
 			}
 			case ION_TABLE_CREATE_TABLE: {

@@ -185,11 +185,15 @@ typedef struct {
 } ion_table_tuple_t;
 
 /**
-@brief	Structure of a schema item that represents an the type and size of an attribute.
+@brief	Structure of a schema item that represents an attribute.
 */
 typedef struct {
+	/**> The size of the attribute name. */
+	uint8_t 						name_length;
+	/**> The name of the attribute. */
+	char							*name;
 	/**> The size of the attribute. */
-	ion_table_attribute_size_t		size;
+	ion_table_attribute_size_t		attribute_size;
 	/**> The type of the attribute. */
 	ion_table_attribute_type_t		type;
 } ion_table_schema_item_t;
@@ -204,8 +208,6 @@ typedef struct {
 	ion_table_schema_count_t		num_attributes;
 	/**> An array of schema items. */
 	ion_table_schema_item_t			*items;
-	/**> An array of names describing the schema items / attributes. */
-	char 							**names;
 } ion_table_schema_t;
 
 #if defined(__cplusplus)

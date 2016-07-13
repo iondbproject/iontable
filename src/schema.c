@@ -21,7 +21,8 @@
 */
 /******************************************************************************/
 
-#include "schema_manager.h"
+#include "schema.h"
+#include "types.h"
 
 /**
 @brief	Write a single primitive type to a file.
@@ -41,12 +42,12 @@ ion_table_create_schema(
 	int i;
 	FILE *file;
 
-	uint8_t name_length	= strlen(table_name);
+	uint8_t name_length	= (uint8_t) (strlen(table_name));
 	char filename[name_length + 5];
 	sprintf(filename, "%s.sch", table_name);
 
 	/* Make sure file does not exist. */
-	file = fopen(filename, "r");
+	file = fopen(filename, "rb");
 	if (NULL != file) {
 		fclose(file);
 		return ION_TABLE_ERROR_TABLE_EXISTS;
@@ -65,26 +66,26 @@ ion_table_create_schema(
 	if (1 != QUICKWRITE(schema->num_attributes, file)) {
 		goto BAD_WRITE;
 	}
-	/* First, write out size of each name, then the name itself. */
+	/* Write out each item. */
 	for (i = 0; i < (int)(schema->num_attributes); i++) {
-		name_length = strlen(schema->names[i]) + 1;
+		name_length = (uint8_t) (strlen(schema->items[i].name) + 1);
 		if (1 != QUICKWRITE(name_length, file)) {
 			goto BAD_WRITE;
 		}
-		if (1 != fwrite(schema->names[i], name_length, 1, file)) {
+		if (1 != fwrite(schema->items[i].name, name_length, 1, file)) {
 			goto BAD_WRITE;
 		}
-	}
-	/* Next, write out each item. */
-	for (i = 0; i < (int)(schema->num_attributes); i++) {
+
 		if (1 != QUICKWRITE(schema->items[i].type, file)) {
 			goto BAD_WRITE;
 		}
-		if (1 != QUICKWRITE(schema->items[i].size, file)) {
+
+		if (1 != QUICKWRITE(schema->items[i].attribute_size, file)) {
 			goto BAD_WRITE;
 		}
 	}
 
+	fclose(file);
 	return ION_TABLE_ERROR_OK;
 
 	BAD_WRITE:
@@ -100,7 +101,7 @@ ion_table_load_schema(
 ) {
 	int i;
 	FILE *file;
-	uint8_t name_length	= strlen(table_name);
+	uint8_t name_length	= (uint8_t) strlen(table_name);
 
 	char filename[name_length + 5];
 	sprintf(filename, "%s.sch", table_name);
@@ -125,28 +126,28 @@ ion_table_load_schema(
 	/* Allocate enough space in memory for the schema. */
 	schema->items = db_qmm_falloc(mem_man, sizeof(ion_table_schema_item_t) * schema->num_attributes);
 
-	/* First, read in size of each name and the name. */
+	/* Read in each item. */
 	// TODO: Use fextend, do the arithmetic.
-	schema->names = db_qmm_falloc(mem_man, sizeof(char *) * schema->num_attributes);
 	for (i = 0; i < (int)(schema->num_attributes); i++) {
-		if (1 != QUICKREAD(name_length, file)) {
+		if (1 != QUICKREAD(schema->items[i].name_length, file)) {
 			goto BAD_READ;
 		}
-		schema->names[i] = db_qmm_falloc(mem_man, name_length);
-		if (1 != fread(schema->names[i], name_length, 1, file)) {
+
+		schema->items[i].name = db_qmm_falloc(mem_man, name_length);
+		if (1 != fread(schema->items[i].name, schema->items[i].name_length, 1, file)) {
 			goto BAD_READ;
 		}
-	}
-	/* Next, read out each item. */
-	for (i = 0; i < (int)(schema->num_attributes); i++) {
+
 		if (1 != QUICKREAD(schema->items[i].type, file)) {
 			goto BAD_READ;
 		}
-		if (1 != QUICKREAD(schema->items[i].size, file)) {
+
+		if (1 != QUICKREAD(schema->items[i].attribute_size, file)) {
 			goto BAD_READ;
 		}
 	}
 
+	fclose(file);
 	return ION_TABLE_ERROR_OK;
 
 	BAD_READ:

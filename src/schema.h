@@ -32,6 +32,7 @@ extern "C" {
 #include <string.h>
 
 #include "types.h"
+#include "stack_memory_manager.h"
 
 /**
 @brief		Creates a new schema file for a table. It also keeps track of the table ID and any other meta data

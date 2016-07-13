@@ -34,8 +34,8 @@
 */
 /******************************************************************************/
 
-#if !defined(STACK_MEMORY_MANAGER_H_)
-#define STACK_MEMORY_MANAGER_H_
+#if !defined(ION_TABLE_STACK_MEMORY_MANAGER_H_)
+#define ION_TABLE_STACK_MEMORY_MANAGER_H_
 
 #if defined(__cplusplus)
 extern "C" {
@@ -308,4 +308,4 @@ void db_qmm_bclear(db_query_mm_t *mmp);
 }
 #endif
 
-#endif /* STACK_MEMORY_MANAGER_H_ */
+#endif /* ION_TABLE_STACK_MEMORY_MANAGER_H_ */

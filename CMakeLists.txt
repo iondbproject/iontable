@@ -50,3 +50,4 @@ add_subdirectory(src)
 
 add_subdirectory(tests)
 add_subdirectory(tests/unit/vme)
+add_subdirectory(tests/unit/schema)
