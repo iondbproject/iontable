@@ -124,7 +124,10 @@ ion_table_load_schema(
 	}
 
 	/* Allocate enough space in memory for the schema. */
-	schema->items = db_qmm_falloc(mem_man, sizeof(ion_table_schema_item_t) * schema->num_attributes);
+	schema->items = db_qmm_balloc(mem_man, sizeof(ion_table_schema_item_t) * schema->num_attributes);
+	if (NULL == schema->items) {
+		return ION_TABLE_ERROR_OUT_OF_MEMORY;
+	}
 
 	/* Read in each item. */
 	// TODO: Use fextend, do the arithmetic.
@@ -133,7 +136,11 @@ ion_table_load_schema(
 			goto BAD_READ;
 		}
 
-		schema->items[i].name = db_qmm_falloc(mem_man, name_length);
+		schema->items[i].name = db_qmm_balloc(mem_man, name_length);
+		if (NULL == schema->items[i].name) {
+			return ION_TABLE_ERROR_OUT_OF_MEMORY;
+		}
+
 		if (1 != fread(schema->items[i].name, schema->items[i].name_length, 1, file)) {
 			goto BAD_READ;
 		}
@@ -155,3 +162,38 @@ ion_table_load_schema(
 		return ION_TABLE_ERROR_FILE_BAD_READ;
 }
 
+ion_table_error_t
+ion_table_delete_schema(
+	char *table_name
+) {
+	uint8_t name_length	= (uint8_t) strlen(table_name);
+	char filename[name_length + 5];
+	sprintf(filename, "%s.sch", table_name);
+
+	if (remove(filename) != 0) {
+		return ION_TABLE_ERROR_FILE_NOT_REMOVED;
+	}
+
+	return ION_TABLE_ERROR_OK;
+}
+
+ion_table_error_t
+ion_table_free_schema_from_memory(
+	ion_table_schema_t *schema,
+	db_query_mm_t *mem_man
+) {
+	int i;
+	for (i = (int)(schema->num_attributes) -1; i >= 0 ; i--) {
+		if (db_qmm_bfree(mem_man, schema->items[i].name) != 1) {
+			return ION_TABLE_ERROR_FAILED_TO_FREE_MEMORY;
+		}
+	}
+
+	if (db_qmm_bfree(mem_man, schema->items) != 1) {
+		return ION_TABLE_ERROR_FAILED_TO_FREE_MEMORY;
+	}
+
+	schema->items = NULL;
+
+	return ION_TABLE_ERROR_OK;
+}

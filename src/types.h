@@ -37,10 +37,16 @@ extern "C" {
 typedef enum {
 	/**> An error code that indicates that everything is OK. */
 	ION_TABLE_ERROR_OK,
+	/**> An error code that indicates that there is no space RAM left. */
+	ION_TABLE_ERROR_OUT_OF_MEMORY,
+	/**> An error code that indicates that freeing something in memory failed. */
+	ION_TABLE_ERROR_FAILED_TO_FREE_MEMORY,
 	/**> An error code that indicates that a file could not be created. */
 	ION_TABLE_ERROR_FILE_NOT_CREATED,
 	/**> An error code that indicates that a file could not be opened. */
 	ION_TABLE_ERROR_FILE_NOT_OPENED,
+	/**> An error code that indicates that a file could not be removed. */
+	ION_TABLE_ERROR_FILE_NOT_REMOVED,
 	/**> An error code that indicates that a write in a file failed. */
 	ION_TABLE_ERROR_FILE_BAD_WRITE,
 	/**> An error code that indicates that a read in a file failed. */

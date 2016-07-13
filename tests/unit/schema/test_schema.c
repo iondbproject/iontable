@@ -58,7 +58,7 @@ run_test_setup() {
 }
 
 void
-test_save_schema_001(
+test_save_schema(
 	planck_unit_test_t *tc
 ) {
 	PLANCK_UNIT_ASSERT_TRUE(tc, run_test_setup() == ION_TABLE_TRUE);
@@ -119,7 +119,7 @@ test_save_schema_001(
 }
 
 void
-test_load_schema_001(
+test_load_schema(
 	planck_unit_test_t *tc
 ) {
 	PLANCK_UNIT_ASSERT_TRUE(tc, run_test_setup() == ION_TABLE_TRUE);
@@ -152,11 +152,11 @@ test_load_schema_001(
 	db_query_mm_t			mem_man;
 	int						size			= 100;
 	char					memory[size];
-	init_query_mm(&mem_man, memory, size);
+	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, 1, init_query_mm(&mem_man, memory, size));
 
 	ion_table_schema_t loaded_schema;
 
-	ion_table_load_schema(tables[0], &loaded_schema, &mem_man);
+	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, ION_TABLE_ERROR_OK, ion_table_load_schema(tables[0], &loaded_schema, &mem_man));
 
 	/* id == 1 */
 	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, schema.id, loaded_schema.id);
@@ -190,19 +190,21 @@ test_load_schema_001(
 }
 
 void
-test_save_then_load_schema_001(
+test_save_then_load_schema(
 	planck_unit_test_t *tc
 ) {
+	PLANCK_UNIT_ASSERT_TRUE(tc, run_test_setup() == ION_TABLE_TRUE);
+
 	db_query_mm_t			mem_man;
 	int						size			= 100;
 	char					memory[size];
-	init_query_mm(&mem_man, memory, size);
+	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, 1, init_query_mm(&mem_man, memory, size));
 
 	ion_table_schema_t loaded_schema;
 
 	/* First save the schema then load it. */
-	ion_table_create_schema(tables[0], &schema);
-	ion_table_load_schema(tables[0], &loaded_schema, &mem_man);
+	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, ION_TABLE_ERROR_OK, ion_table_create_schema(tables[0], &schema));
+	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, ION_TABLE_ERROR_OK, ion_table_load_schema(tables[0], &loaded_schema, &mem_man));
 
 	/* id == 1 */
 	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, schema.id, loaded_schema.id);
@@ -235,14 +237,51 @@ test_save_then_load_schema_001(
 	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, items[1].attribute_size, loaded_schema.items[1].attribute_size);
 }
 
+void
+test_delete_schema(
+	planck_unit_test_t *tc
+) {
+	PLANCK_UNIT_ASSERT_TRUE(tc, run_test_setup() == ION_TABLE_TRUE);
+	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, ION_TABLE_ERROR_OK, ion_table_create_schema(tables[0], &schema));
+	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, ION_TABLE_ERROR_OK, ion_table_delete_schema(tables[0]));
+
+	/* Check to make sure file is not there */
+	FILE *fp = fopen(tables[0], "rb");
+	PLANCK_UNIT_ASSERT_TRUE(tc, NULL == fp);
+}
+
+void
+test_free_schema(
+	planck_unit_test_t *tc
+) {
+	PLANCK_UNIT_ASSERT_TRUE(tc, run_test_setup() == ION_TABLE_TRUE);
+
+	db_query_mm_t			mem_man;
+	int						size			= 100;
+	char					memory[size];
+	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, 1, init_query_mm(&mem_man, memory, size));
+
+	ion_table_schema_t loaded_schema;
+
+	/* First save the schema then load it. */
+	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, ION_TABLE_ERROR_OK, ion_table_create_schema(tables[0], &schema));
+	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, ION_TABLE_ERROR_OK, ion_table_load_schema(tables[0], &loaded_schema, &mem_man));
+
+	/* Free the loaded schema from memory. */
+	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, ION_TABLE_ERROR_OK, ion_table_free_schema_from_memory(&loaded_schema, &mem_man));
+	PLANCK_UNIT_ASSERT_TRUE(tc, loaded_schema.items == NULL);
+}
+
 planck_unit_suite_t *
 schema_getsuite(
 ) {
 	planck_unit_suite_t *suite = planck_unit_new_suite();
 
-	PLANCK_UNIT_ADD_TO_SUITE(suite, test_save_schema_001);
-	PLANCK_UNIT_ADD_TO_SUITE(suite, test_load_schema_001);
-	PLANCK_UNIT_ADD_TO_SUITE(suite, test_save_then_load_schema_001);
+	PLANCK_UNIT_ADD_TO_SUITE(suite, test_save_schema);
+	PLANCK_UNIT_ADD_TO_SUITE(suite, test_load_schema);
+	PLANCK_UNIT_ADD_TO_SUITE(suite, test_save_then_load_schema);
+	PLANCK_UNIT_ADD_TO_SUITE(suite, test_delete_schema);
+	PLANCK_UNIT_ADD_TO_SUITE(suite, test_free_schema);
 
 	return suite;
 }

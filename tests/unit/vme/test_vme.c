@@ -47,7 +47,7 @@ vme_getsuite(
 ) {
 	planck_unit_suite_t *suite = planck_unit_new_suite();
 
-	PLANCK_UNIT_ADD_TO_SUITE(suite, test_create_table_001);
+//	PLANCK_UNIT_ADD_TO_SUITE(suite, test_create_table_001);
 
 	return suite;
 }
