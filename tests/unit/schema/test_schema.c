@@ -76,8 +76,8 @@ test_save_schema(
 
 	char buffer[10];
 	/* id == 1 */
-	PLANCK_UNIT_ASSERT_TRUE(tc, fread(buffer, 2, 1, fp) == 1);
-	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, schema.id, (uint16_t) *buffer);
+	PLANCK_UNIT_ASSERT_TRUE(tc, fread(buffer, sizeof(ion_dictionary_id_t), 1, fp) == 1);
+	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, schema.id, (ion_dictionary_id_t) *buffer);
 
 	/* num_attributes == 2 */
 	PLANCK_UNIT_ASSERT_TRUE(tc, fread(buffer, sizeof(ion_table_schema_count_t), 1, fp) == 1);
@@ -132,7 +132,7 @@ test_load_schema(
 	PLANCK_UNIT_ASSERT_TRUE(tc, NULL != fp);
 
 	/* Write out schema/table ID and the number of attributes it has. */
-	PLANCK_UNIT_ASSERT_TRUE(tc, fwrite(&(schema.id), 2, 1, fp) == 1);
+	PLANCK_UNIT_ASSERT_TRUE(tc, fwrite(&(schema.id), sizeof(ion_dictionary_id_t), 1, fp) == 1);
 	PLANCK_UNIT_ASSERT_TRUE(tc, fwrite(&(schema.num_attributes), sizeof(ion_table_schema_count_t), 1, fp) == 1);
 
 	/* Write out item 1. */

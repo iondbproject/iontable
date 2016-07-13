@@ -88,8 +88,29 @@ ion_table_execute(
 			case ION_TABLE_OPCODE_CREATE_TABLE: {
 				ion_table_schema_t schema;
 				schema.num_attributes = (ion_table_schema_count_t) plan->count;
-				schema.id = 0; // TODO
 				schema.items = plan->pointer;
+
+				ion_value_size_t value_size = 0;
+
+				int i;
+				for (i = 0; i < schema.num_attributes; i++) {
+					value_size += schema.items[i].attribute_size;
+				}
+
+				dictionary_t dictionary;
+				dictionary_handler_t bpp_tree_handler;
+				bpptree_init(&bpp_tree_handler);
+
+				if (ion_init_master_table() != err_ok) {
+					return ION_TABLE_STATUS_ERROR(ION_TABLE_ERROR_DICTIONARY_NOT_CREATED);
+				}
+
+				if (ion_master_table_create_dictionary(&bpp_tree_handler, &dictionary, key_type_numeric_unsigned,
+													   4, value_size, -1) != err_ok) {
+					return ION_TABLE_STATUS_ERROR(ION_TABLE_ERROR_DICTIONARY_NOT_CREATED);
+				}
+
+				schema.id = dictionary.instance->id;
 
 				if (ion_table_create_schema((char *) CUROP.p3.pointer, &schema) != ION_TABLE_ERROR_OK) {
 					return ION_TABLE_STATUS_ERROR(ION_TABLE_ERROR_TABLE_ALREADY_EXISTS);

@@ -31,6 +31,15 @@
 #include "macros.h"
 #include "schema.h"
 #include "stack_memory_manager.h"
+#include "iondb/src/key_value/kv_io.h"
+#include "iondb/src/key_value/kv_system.h"
+#include "iondb/src/dictionary/dictionary.h"
+#include "iondb/src/dictionary/dictionary_types.h"
+#include "iondb/src/dictionary/ion_master_table.h"
+#include "iondb/src/file/ion_file.h"
+#include "iondb/src/file/linked_file_bag.h"
+#include "iondb/src/dictionary/bpp_tree/bpp_tree.h"
+#include "iondb/src/dictionary/bpp_tree/bpp_tree_handler.h"
 
 /**
 @brief		Initializes a query plan.
@@ -54,8 +63,6 @@ ion_table_init_executable(
  			calling this for each result row to get the complete result set.
 @param[in]	plan
  				Virtual Machine query plan to be executed.
-@param[out]	tuple
- 				Result row or tuple that is returned.
 @return		Return status of the query. It contains an @ref ion_table_error_e code and a count of the number of items
  			affected by the query.
 */

@@ -30,6 +30,7 @@ extern "C" {
 
 #include <stdint.h>
 #include "stack_memory_manager.h"
+#include "iondb/src/dictionary/dictionary_types.h"
 
 /**
 @brief	Error codes for ion table
@@ -53,12 +54,14 @@ typedef enum {
 	ION_TABLE_ERROR_FILE_BAD_READ,
 	/**> An error code that indicates that a seek in a file failed. */
 	ION_TABLE_ERROR_FILE_BAD_SEEK,
-	/**> An error code used for ion_table_status_t to indicate that a status has not been initialized yet. */
-	ION_TABLE_ERROR_STATUS_UNINITIALIZED,
+	/**> An error code that indicates that dictionary creation failed. */
+	ION_TABLE_ERROR_DICTIONARY_NOT_CREATED,
 	/**> An error code used to indicate that a table (or schema) already exists. */
 	ION_TABLE_ERROR_TABLE_ALREADY_EXISTS,
 	/**> An error code that indicates that an opcode in an execution plan is invalid. */
-	ION_TABLE_ERROR_UNDEFINED_OPCODE
+	ION_TABLE_ERROR_UNDEFINED_OPCODE,
+	/**> An error code used for ion_table_status_t to indicate that a status has not been initialized yet. */
+	ION_TABLE_ERROR_STATUS_UNINITIALIZED
 } ion_table_error_e;
 
 /**
@@ -210,7 +213,7 @@ typedef struct {
 */
 typedef struct {
 	/**> ID of underlying dictionary assigned by the IonDB master table. */
-	uint16_t 						id;	// TODO: Make this the actual master table id type.
+	ion_dictionary_id_t				id;	// TODO: Make this the actual master table id type.
 	/**> The number of attributes in the schema. */
 	ion_table_schema_count_t		num_attributes;
 	/**> An array of schema items. */

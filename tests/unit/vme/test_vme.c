@@ -39,6 +39,10 @@ run_test_setup() {
 		remove(temp_string);
 	}
 
+	remove(ION_MASTER_TABLE_FILENAME);
+	remove("1.bpt");
+	remove("1.val");
+
 	return ION_TABLE_TRUE;
 }
 
@@ -77,7 +81,7 @@ test_create_table_001(
 	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, ION_TABLE_ERROR_OK, ion_table_load_schema(tables[0], &loaded_schema, &mem_man));
 
 	/* id == 0 */
-	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, 0, loaded_schema.id);
+	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, 1, loaded_schema.id);
 
 	/* num_attributes == 1 */
 	PLANCK_UNIT_ASSERT_INT_ARE_EQUAL(tc, 1, loaded_schema.num_attributes);

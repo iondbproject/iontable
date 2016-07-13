@@ -6,6 +6,7 @@
 
 #include "../../planck_unit/src/planck_unit.h"
 #include "../../../src/vme.h"
+#include "../../../src/iondb/src/dictionary/ion_master_table.h"
 
 #if defined(__cplusplus)
 extern "C" {

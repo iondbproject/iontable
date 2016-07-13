@@ -16,18 +16,22 @@ set(SOURCE_FILES
     query_serializer.c)
 
 set(IONDB_SOURCE_FILES
-    iondb/src/kv_system.h
-    iondb/src/kv_io.h
-    iondb/src/kv_io.c
+    iondb/src/key_value/kv_system.h
+    iondb/src/key_value/kv_io.h
+    iondb/src/key_value/kv_io.c
     iondb/src/dictionary/dictionary.h
     iondb/src/dictionary/dictionary.c
     iondb/src/dictionary/dictionary_types.h
     iondb/src/dictionary/ion_master_table.h
     iondb/src/dictionary/ion_master_table.c
+    iondb/src/file/ion_file.h
+    iondb/src/file/ion_file.c
+    iondb/src/file/linked_file_bag.h
+    iondb/src/file/linked_file_bag.c
     iondb/src/dictionary/bpp_tree/bpp_tree.h
     iondb/src/dictionary/bpp_tree/bpp_tree.c
     iondb/src/dictionary/bpp_tree/bpp_tree_handler.h
-    iondb/src/dictionary/bpp_tree/bpp_tree_handler.c utils.h utils.c)
+    iondb/src/dictionary/bpp_tree/bpp_tree_handler.c)
 
 if(USE_ARDUINO)
     set(${PROJECT_NAME}_BOARD       ${BOARD})
