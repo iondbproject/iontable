@@ -48,6 +48,8 @@ typedef enum {
 	ION_TABLE_ERROR_FILE_NOT_OPENED,
 	/**> An error code that indicates that a file could not be removed. */
 	ION_TABLE_ERROR_FILE_NOT_REMOVED,
+	/**> An error code that indicates that a file could not be closed. */
+	ION_TABLE_ERROR_FILE_NOT_CLOSED,
 	/**> An error code that indicates that a write in a file failed. */
 	ION_TABLE_ERROR_FILE_BAD_WRITE,
 	/**> An error code that indicates that a read in a file failed. */
@@ -56,6 +58,12 @@ typedef enum {
 	ION_TABLE_ERROR_FILE_BAD_SEEK,
 	/**> An error code that indicates that dictionary creation failed. */
 	ION_TABLE_ERROR_DICTIONARY_NOT_CREATED,
+	/**> An error code that indicates that dictionary open failed. */
+	ION_TABLE_ERROR_DICTIONARY_NOT_OPENED,
+	/**> An error code that indicates that dictionary remove failed. */
+	ION_TABLE_ERROR_DICTIONARY_NOT_REMOVED,
+	/**> An error code that indicates that dictionary close failed. */
+	ION_TABLE_ERROR_DICTIONARY_NOT_CLOSED,
 	/**> An error code used to indicate that a table (or schema) already exists. */
 	ION_TABLE_ERROR_TABLE_ALREADY_EXISTS,
 	/**> An error code that indicates that an opcode in an execution plan is invalid. */

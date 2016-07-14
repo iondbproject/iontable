@@ -112,6 +112,10 @@ ion_table_execute(
 
 				schema.id = dictionary.instance->id;
 
+				if (ion_close_dictionary(&dictionary) != err_ok) {
+					return ION_TABLE_STATUS_ERROR(ION_TABLE_ERROR_DICTIONARY_NOT_CLOSED);
+				}
+
 				if (ion_table_create_schema((char *) CUROP.p3.pointer, &schema) != ION_TABLE_ERROR_OK) {
 					return ION_TABLE_STATUS_ERROR(ION_TABLE_ERROR_TABLE_ALREADY_EXISTS);
 				}
